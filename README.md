@@ -81,6 +81,32 @@ The application will be available at:
 http://localhost:3000
 ```
 
+## Docker
+
+Build image:
+
+```bash
+docker build -t energy-dashboard .
+```
+
+Run container:
+
+```bash
+docker run --rm -p 3000:3000 -e NEXT_PUBLIC_API_BASE_URL=http://localhost:8080 energy-dashboard
+```
+
+The application will be available at:
+
+```text
+http://localhost:3000
+```
+
+The backend API should be running at:
+
+```text
+http://localhost:8080
+```
+
 ## Available scripts
 
 Run development server:

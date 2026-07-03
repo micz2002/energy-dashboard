@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from "recharts";
 import type { DailyEnergyMix } from "@/types/energy";
 import {
   formatDate,
@@ -14,22 +8,28 @@ import {
   formatSourceName,
   getDayLabel,
 } from "@/lib/formatters";
+import { SOURCE_COLORS } from "@/lib/energySources";
 
 type EnergyMixCardProps = {
   day: DailyEnergyMix;
   index: number;
 };
 
-const SOURCE_COLORS: Record<string, string> = {
-  wind: "#064e3b",
-  solar: "#0284c7",
-  hydro: "#38bdf8",
-  nuclear: "#0f766e",
-  biomass: "#65a30d",
-  gas: "#334155",
-  coal: "#111827",
-  imports: "#94a3b8",
-  other: "#cbd5e1",
+type ChartSlice = {
+  name: string;
+  value: number;
+  fill: string;
+};
+
+type PieShapeProps = {
+  cx?: number;
+  cy?: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  startAngle?: number;
+  endAngle?: number;
+  fill?: string;
+  payload?: ChartSlice;
 };
 
 function getBadgeLabel(cleanEnergyPercentage: number) {
@@ -56,12 +56,17 @@ function getBadgeClass(cleanEnergyPercentage: number) {
   return "bg-amber-100 text-amber-900";
 }
 
+function renderPieSlice(props: PieShapeProps) {
+  return <Sector {...props} fill={props.payload?.fill ?? props.fill} />;
+}
+
 export function EnergyMixCard({ day, index }: EnergyMixCardProps) {
-  const chartData = day.sources
+  const chartData: ChartSlice[] = day.sources
     .filter((source) => source.percentage > 0)
     .map((source) => ({
       name: source.source,
       value: source.percentage,
+      fill: SOURCE_COLORS[source.source] ?? "#64748b",
     }));
 
   const visibleSources = day.sources
@@ -102,20 +107,13 @@ export function EnergyMixCard({ day, index }: EnergyMixCardProps) {
                 outerRadius={74}
                 paddingAngle={2}
                 stroke="none"
-              >
-                {chartData.map((entry) => (
-                  <Cell
-                    key={entry.name}
-                    fill={SOURCE_COLORS[entry.name] ?? "#64748b"}
-                  />
-                ))}
-              </Pie>
+                shape={renderPieSlice}
+              />
               <Tooltip
-                formatter={(value) => [
+                formatter={(value, name) => [
                   formatPercentage(Number(value)),
-                  "Share",
+                  formatSourceName(String(name)),
                 ]}
-                labelFormatter={(label) => formatSourceName(String(label))}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -127,26 +125,26 @@ export function EnergyMixCard({ day, index }: EnergyMixCardProps) {
           </div>
         </div>
 
-        <div className="space-y-3">
-          {visibleSources.slice(0, 6).map((source) => (
+        <div className="space-y-2.5">
+          {visibleSources.map((source) => (
             <div
               key={source.source}
               className="flex items-center justify-between gap-4 text-sm"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <span
-                  className="h-2.5 w-2.5 rounded-full"
+                  className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{
                     backgroundColor:
                       SOURCE_COLORS[source.source] ?? "#64748b",
                   }}
                 />
-                <span className="text-slate-700">
+                <span className="truncate text-slate-700">
                   {formatSourceName(source.source)}
                 </span>
               </div>
 
-              <span className="font-bold text-slate-950">
+              <span className="shrink-0 font-bold text-slate-950">
                 {formatPercentage(source.percentage)}
               </span>
             </div>

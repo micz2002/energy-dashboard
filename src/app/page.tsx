@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { LoadingState } from "@/components/LoadingState";
 import { getEnergyMix } from "@/lib/api";
+import { Footer } from "@/components/Footer";
 import type { EnergyMixResponse } from "@/types/energy";
 
 export default function Home() {
@@ -76,6 +77,8 @@ export default function Home() {
           <ChargingOptimizer />
         </>
       )}
+
+      <Footer />
     </main>
   );
 }

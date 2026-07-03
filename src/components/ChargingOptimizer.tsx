@@ -48,6 +48,11 @@ export function ChargingOptimizer() {
     };
   }, [durationHours]);
 
+    function handleDurationChange(value: number) {
+        const validatedValue = Math.min(6, Math.max(1, value));
+        setDurationHours(validatedValue);
+    }
+
   return (
     <section className="mx-auto max-w-7xl px-5 pb-16">
       <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-slate-50 to-emerald-50 p-6 shadow-sm sm:p-10">
@@ -89,7 +94,7 @@ export function ChargingOptimizer() {
                 step={1}
                 value={durationHours}
                 onChange={(event) =>
-                  setDurationHours(Number(event.target.value))
+                  handleDurationChange(Number(event.target.value))
                 }
                 className="mt-6 w-full accent-emerald-800"
               />

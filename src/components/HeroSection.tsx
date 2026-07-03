@@ -3,7 +3,16 @@ import { ArrowDown, Leaf } from "lucide-react";
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-emerald-950 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,197,94,0.35),transparent_30%),radial-gradient(circle_at_80%_40%,rgba(14,165,233,0.28),transparent_28%),linear-gradient(120deg,rgba(2,6,23,0.95),rgba(6,78,59,0.75))]" />
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/hero-energy.jpg')",
+        }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-emerald-950/80 to-emerald-900/45" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(44, 199, 101, 0.15),transparent_32%)]" />
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-50 to-transparent" />
 
@@ -18,7 +27,7 @@ export function HeroSection() {
             Great Britain Energy Mix Dashboard
           </h1>
 
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/85">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/90">
             Track forecasted generation mix data and find the cleanest charging
             window for your electric vehicle.
           </p>
